@@ -11,9 +11,7 @@ celery_app = Celery("notification_worker", broker=REDIS_URL)
 # Connect a standard Redis client for the Circuit Breaker
 redis_client = redis.Redis(host='redis', port=6379, db=1)
 
-# ==========================================
 # CIRCUIT BREAKER LOGIC
-# ==========================================
 def check_circuit_breaker(r_client):
     fails = r_client.get("circuit_fails")
     if fails and int(fails) >= 3:
@@ -26,10 +24,7 @@ def record_failure(r_client):
 def reset_circuit(r_client):
     r_client.set("circuit_fails", 0)
 
-
-# ==========================================
 # MOCK PROVIDERS
-# ==========================================
 class BaseProvider:
     def send(self, target, content):
         raise NotImplementedError
@@ -45,10 +40,7 @@ providers = {
     "EMAIL": MockEmailProvider(),
     # SMS and PUSH logic would go here
 }
-
-# ==========================================
 # CELERY TASK
-# ==========================================
 @celery_app.task(bind=True, max_retries=3)
 def process_notification(self, notification_id: str, channel: str, content: str):
     provider = providers.get(channel)
