@@ -8,9 +8,7 @@ from models import NotificationStatus
 
 client = TestClient(app)
 
-# ==========================================
 # FIXTURES & MOCKS
-# ==========================================
 @pytest.fixture
 def mock_db():
     """Creates a mock SQLAlchemy database session."""
@@ -24,10 +22,7 @@ def override_db(mock_db):
     yield mock_db
     app.dependency_overrides.clear()
 
-
-# ==========================================
 # CORE FUNCTIONALITY & ENDPOINT TESTS
-# ==========================================
 
 @patch("main.redis_client")
 @patch("main.process_notification")
