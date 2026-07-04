@@ -76,7 +76,6 @@ def process_notification(self, notification_id: str, channel: str, content: str)
                 db.rollback()
             finally:
                 db.close()
-            # -------------------------------------
             
     except Exception as e:
         # 3. Record failure and trigger exponential backoff retry
